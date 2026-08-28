@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>About — TGL MedStaff</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --red: #CC2229; --red-dark: #a31a20; --red-light: #f5e6e7;
+    --navy: #1B2F6E; --navy-dark: #111e4a; --navy-mid: #2a4188; --navy-light: #e8edf8;
+    --white: #ffffff; --off-white: #f8f7f5; --gray: #6b7280; --text: #111827;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--text); overflow-x: hidden; }
+
+  /* ── NAV ── */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(255,255,255,0.97); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(27,47,110,0.1); display: flex; align-items: center; justify-content: space-between; padding: 12px 48px; }
+  .nav-logo { display: flex; align-items: center; text-decoration: none; }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a { font-size: 16px; font-weight: 500; color: var(--navy); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--red); }
+  .nav-links a.active { color: var(--red); border-bottom: 2px solid var(--red); padding-bottom: 2px; }
+  .nav-cta { background: var(--red); color: #fff; padding: 9px 22px; border-radius: 24px; font-size: 13px; font-weight: 600; text-decoration: none; transition: background 0.2s, transform 0.15s; }
+  .nav-cta:hover { background: var(--red-dark); transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero { background: var(--navy-dark); padding: 140px 48px 100px; position: relative; overflow: hidden; text-align: center; }
+  .hero::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px); background-size: 40px 40px; }
+  .hero-glow { position: absolute; top: -80px; left: 50%; transform: translateX(-50%); width: 600px; height: 300px; background: radial-gradient(ellipse, rgba(204,34,41,0.12) 0%, transparent 70%); pointer-events: none; }
+  .hero-ekg { position: absolute; bottom: 60px; left: 0; right: 0; width: 100%; opacity: 0.15; pointer-events: none; }
+  .hero-ekg path { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: ekg-loop 4s linear infinite; }
+  .hero-content { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; }
+  .hero-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; letter-spacing: 2px; color: var(--red); text-transform: uppercase; margin-bottom: 20px; }
+  .hero-eyebrow::before, .hero-eyebrow::after { content: ''; display: block; width: 24px; height: 2px; background: var(--red); }
+  h1 { font-family: 'DM Serif Display', serif; font-size: clamp(42px, 5.5vw, 68px); font-weight: 700; color: #fff; line-height: 1.08; margin-bottom: 24px; }
+  h1 em { color: var(--red); font-style: italic; }
+  .hero-sub { font-size: 18px; line-height: 1.8; color: rgba(255,255,255,0.65); margin: 0 auto; max-width: 640px; }
+
+  /* ── SECTIONS ── */
+  .section { padding: 96px 48px; max-width: 1200px; margin: 0 auto; }
+  .section-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 700; letter-spacing: 2px; color: var(--red); text-transform: uppercase; margin-bottom: 16px; }
+  .section-tag::before { content: ''; display: block; width: 20px; height: 2px; background: var(--red); }
+  h2 { font-family: 'DM Serif Display', serif; font-size: clamp(30px, 3.5vw, 46px); font-weight: 700; color: var(--navy); line-height: 1.12; margin-bottom: 20px; }
+  h2 em { color: var(--red); font-style: italic; }
+  .lead { font-size: 18px; color: var(--gray); line-height: 1.8; max-width: 680px; margin-bottom: 0; }
+
+  /* ── MISSION SPLIT ── */
+  .mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .mission-text p { font-size: 17px; color: var(--gray); line-height: 1.85; margin-bottom: 20px; }
+  .mission-text p:last-child { margin-bottom: 0; }
+  .mission-stat-panel { display: flex; flex-direction: column; gap: 16px; }
+  .mission-stat { background: var(--navy-light); border: 2px solid rgba(27,47,110,0.15); border-left: 4px solid var(--red); border-radius: 0 14px 14px 0; padding: 28px 32px; }
+  .mission-stat-label { font-size: 14px; font-weight: 700; letter-spacing: 2px; color: var(--red); text-transform: uppercase; margin-bottom: 10px; }
+  .mission-stat-text { font-size: 17px; color: var(--navy); line-height: 1.7; font-weight: 500; }
+
+  /* ── CORE VALUES ── */
+  .values-section { background: var(--navy-dark); padding: 96px 0; position: relative; overflow: hidden; }
+  .values-section::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px); background-size: 40px 40px; }
+  .values-inner { max-width: 1200px; margin: 0 auto; padding: 0 48px; position: relative; z-index: 1; }
+  .values-section .section-tag { color: var(--red); }
+  .values-section h2 { color: #fff; }
+  .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 56px; }
+  .value-card { background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.12); border-top: 4px solid var(--red); border-radius: 0 0 16px 16px; padding: 36px 32px; text-align: center; transition: transform 0.25s, background 0.25s; }
+  .value-card:hover { transform: translateY(-4px); background: rgba(255,255,255,0.1); }
+  .value-num { display: none; }
+  .value-title { font-family: 'DM Sans', sans-serif; font-size: 36px; font-weight: 700; color: var(--navy); margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase; }
+  .value-title em { color: var(--navy); font-style: normal; }
+  .value-desc { font-size: 15px; color: rgba(255,255,255,0.62); line-height: 1.75; }
+
+  /* ── WHY TGL ── */
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; margin-top: 0; }
+  .why-list { display: flex; flex-direction: column; gap: 28px; }
+  .why-item { display: flex; gap: 20px; align-items: flex-start; }
+  .why-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--red-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .why-item h3 { font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+  .why-item p { font-size: 15px; color: var(--gray); line-height: 1.7; }
+  .why-mission-box { background: var(--navy); border-radius: 20px; padding: 48px 40px; position: relative; overflow: hidden; }
+  .why-mission-box::before { content: ''; position: absolute; top: -40px; right: -40px; width: 200px; height: 200px; border-radius: 50%; background: rgba(204,34,41,0.1); }
+  .why-mission-box .section-tag { color: #e88; }
+  .why-mission-box .section-tag::before { background: var(--red); }
+  .why-mission-box h2 { color: #fff; font-size: clamp(30px, 3.5vw, 46px); }
+  .why-mission-box p { font-size: 16px; color: rgba(255,255,255,0.65); line-height: 1.8; margin-top: 16px; }
+  .connect-care-compete { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+  .ccc-pill { background: rgba(204,34,41,0.15); border: 1.5px solid rgba(204,34,41,0.3); color: #fff; border-radius: 24px; padding: 8px 20px; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+
+  /* ── TEAM PREVIEW ── */
+  .team-preview { background: #e8ecf5; padding: 96px 0; position: relative; overflow: hidden; }
+  .team-preview-inner { max-width: 1200px; margin: 0 auto; padding: 0 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .team-preview .section-tag { color: var(--red); }
+  .team-preview h2 { color: var(--navy); margin-bottom: 16px; }
+  .team-preview p { font-size: 17px; color: var(--gray); line-height: 1.8; margin-bottom: 32px; }
+  .team-link { display: inline-flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; color: var(--red); text-decoration: none; border-bottom: 2px solid rgba(204,34,41,0.3); padding-bottom: 4px; transition: border-color 0.2s, gap 0.2s; }
+  .team-link:hover { border-color: var(--red); gap: 14px; }
+  .team-avatars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .team-avatar-card { background: var(--white); border: 2px solid rgba(27,47,110,0.12); border-radius: 14px; padding: 24px 16px; text-align: center; transition: transform 0.2s, box-shadow 0.2s; }
+  .team-avatar-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(27,47,110,0.12); }
+  .avatar-circle { width: 64px; height: 64px; border-radius: 50%; background: var(--navy); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 700; color: #fff; }
+  .avatar-name { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 2px; }
+  .avatar-title { font-size: 11px; color: var(--gray); line-height: 1.4; }
+  .team-avatar-card.see-more { background: var(--navy-dark); border-color: var(--navy-mid); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; text-decoration: none; }
+  .team-avatar-card.see-more .avatar-name { color: #fff; }
+  .team-avatar-card.see-more .avatar-title { color: rgba(255,255,255,0.5); }
+
+  /* ── CTA ── */
+  .cta-banner { background: var(--navy-dark); position: relative; overflow: hidden; padding: 80px 48px; text-align: center; }
+  .cta-banner::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(204,34,41,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(204,34,41,0.08) 1px, transparent 1px); background-size: 48px 48px; }
+  .cta-content { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
+  .cta-banner .section-tag { justify-content: center; color: var(--red); }
+  .cta-banner .section-tag::before { display: none; }
+  .cta-banner h2 { color: #fff; margin-bottom: 16px; }
+  .cta-banner p { font-size: 18px; color: rgba(255,255,255,0.6); margin-bottom: 40px; }
+  .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary { background: var(--red); color: #fff; padding: 14px 32px; border-radius: 30px; font-size: 14px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s, transform 0.15s; }
+  .btn-primary:hover { background: var(--red-dark); transform: translateY(-2px); }
+  .btn-outline { border: 1.5px solid rgba(255,255,255,0.3); color: #fff; padding: 14px 32px; border-radius: 30px; font-size: 14px; font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: border-color 0.2s, background 0.2s; }
+  .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.07); }
+
+  /* ── FOOTER ── */
+  footer { background: var(--off-white); border-top: 1px solid rgba(27,47,110,0.1); padding: 40px 48px; display: flex; align-items: center; justify-content: space-between; }
+  .footer-text { font-size: 13px; color: var(--gray); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 13px; color: var(--gray); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--red); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes ekg { from { stroke-dashoffset: 1000; } to { stroke-dashoffset: 0; } }
+  @keyframes ekg-loop { 0% { stroke-dashoffset: 1000; } 100% { stroke-dashoffset: -1000; } } 100% { stroke-dashoffset: -1000; } }
+
+  @media (max-width: 900px) {
+    nav { padding: 12px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 120px 24px 72px; }
+    .section { padding: 60px 24px; }
+    .mission-grid, .why-grid, .team-preview-inner { grid-template-columns: 1fr; gap: 40px; }
+    .values-grid { grid-template-columns: 1fr; }
+    .values-inner { padding: 0 24px; }
+    .team-preview-inner { padding: 0 24px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="about.html">
+    <svg width="130" height="34" viewBox="0 0 130 34" xmlns="http://www.w3.org/2000/svg">
+      <text x="2" y="24" font-size="24" font-weight="900" fill="#CC2229" font-family="Arial Black, sans-serif" letter-spacing="-1">TGL</text>
+      <rect x="2" y="27" width="58" height="5" fill="#1B2F6E" rx="1"/>
+      <polyline points="62,20 67,20 69,12 71,28 73,16 75,24 77,20 81,20 83,14 85,26 87,20 94,20" fill="none" stroke="#CC2229" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M98,15 C98,12.8 95.8,10.5 93.5,12.2 C91.2,10.5 89,12.8 89,15 C89,17.2 93.5,21.5 93.5,21.5 C93.5,21.5 98,17.2 98,15Z" fill="#CC2229" transform="translate(6,0)"/>
+      <text x="62" y="32" font-size="8.5" font-weight="800" fill="#1B2F6E" font-family="Arial, sans-serif" letter-spacing="1.5">MEDSTAFF</text>
+    </svg>
+  </a>
+  <div class="nav-links">
+    <a href="about.html" class="active">About</a>
+        <a href="travelers.html">Travelers</a>
+        <a href="workforce.html">Workforce</a>
+        <a href="locums.html">Locums</a>
+        <a href="resources.html">Resources</a>
+  </div>
+  <a class="nav-cta" href="mailto:info@tglmedstaff.com">Get in Touch</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+        <svg class="hero-ekg" width="1440" height="80" viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path style="stroke-dasharray:1000;stroke-dashoffset:1000;animation:ekg-loop 4s linear infinite;" d="M0,40 L120,40 L140,40 L155,8 L165,72 L175,24 L183,56 L190,40 L310,40 L330,40 L345,8 L355,72 L365,24 L373,56 L380,40 L500,40 L520,40 L535,8 L545,72 L555,24 L563,56 L570,40 L690,40 L710,40 L725,8 L735,72 L745,24 L753,56 L760,40 L880,40 L900,40 L915,8 L925,72 L935,24 L943,56 L950,40 L1070,40 L1090,40 L1105,8 L1115,72 L1125,24 L1133,56 L1140,40 L1260,40 L1280,40 L1295,8 L1305,72 L1315,24 L1323,56 L1330,40 L1440,40" fill="none" stroke="white" stroke-width="2"/>
+  </svg>
+  <div class="hero-content">
+    <div class="hero-eyebrow">The Good Life MedStaff</div>
+    <h1>Travel with <em>TGL</em><br>wherever you want to work</h1>
+    <p class="hero-sub">We are on a mission to bring The Good Life to everyone — connecting compassionate clinicians with opportunities that fulfill their passion for healthcare and their desire for adventure.</p>
+  </div>
+</section>
+
+<!-- CORE VALUES — white background, right after hero -->
+<section style="background:var(--white); padding:96px 0;">
+  <div style="max-width:1200px; margin:0 auto; padding:0 48px;">
+    <div class="section-tag" style="color:#CC2229;">Core Values</div>
+    <h2>How we show <em>up every day</em></h2>
+    <div class="values-grid" style="margin-top:48px;">
+
+      <div style="background:#fff; border:2px solid rgba(27,47,110,0.12); border-left:5px solid var(--red); border-radius:0 14px 14px 0; padding:36px 32px; transition:transform 0.25s,box-shadow 0.25s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 40px rgba(27,47,110,0.1)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+        <div class="value-title" style="text-align:left;">CONNECT</div>
+        <p class="value-desc" style="color:var(--gray);text-align:left;">We build real relationships — with our travelers, our facilities, and each other. Every connection we make is intentional, personal, and built to last beyond a single assignment.</p>
+      </div>
+
+      <div style="background:#fff; border:2px solid rgba(27,47,110,0.12); border-left:5px solid var(--red); border-radius:0 14px 14px 0; padding:36px 32px; transition:transform 0.25s,box-shadow 0.25s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 40px rgba(27,47,110,0.1)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+        <div class="value-title" style="text-align:left;">CARE</div>
+        <p class="value-desc" style="color:var(--gray);text-align:left;">We genuinely care about the wellbeing of our clinicians and the patients they serve. That means being available, responsive, and invested — not just during the placement, but throughout the journey.</p>
+      </div>
+
+      <div style="background:#fff; border:2px solid rgba(27,47,110,0.12); border-left:5px solid var(--red); border-radius:0 14px 14px 0; padding:36px 32px; transition:transform 0.25s,box-shadow 0.25s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 40px rgba(27,47,110,0.1)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+        <div class="value-title" style="text-align:left;">COMPETE</div>
+        <p class="value-desc" style="color:var(--gray);text-align:left;">We hold ourselves to the highest standard in the industry. Competitive pay, strong benefits, responsive service — we compete every day to make TGL the best place to travel and the best partner for facilities.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- MISSION — navy dark background -->
+<section style="background:var(--navy-dark); padding:96px 0; position:relative; overflow:hidden;">
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.06) 1px,transparent 1px);background-size:40px 40px;"></div>
+  <div style="max-width:1200px; margin:0 auto; padding:0 48px; position:relative; z-index:1;">
+    <div class="mission-grid">
+      <div class="mission-text">
+        <div class="section-tag" style="color:#CC2229;">Our Mission</div>
+        <h2 style="color:#fff;">Quality care,<br>delivered <em>everywhere.</em></h2>
+        <p style="color:rgba(255,255,255,0.65);">Our highest priority is quality patient care, the wellbeing of our traveling clinicians, and meeting the unique needs of our partner healthcare facilities. We are committed to ensuring our partner facilities have the quality staff they need to provide top-notch care.</p>
+        <p style="color:rgba(255,255,255,0.65);">We are committed to helping our traveling clinicians identify and secure opportunities that fulfill their desire for adventure as well as their passion for their work. We believe the good life includes access to quality healthcare — and we are committed to doing our part to facilitate the movement of resources to areas of highest need.</p>
+      </div>
+      <div class="mission-stat-panel">
+        <div style="background:#fff; border:2px solid rgba(255,255,255,0.9); border-left:4px solid var(--red); border-radius:0 14px 14px 0; padding:28px 32px;">
+          <div class="mission-stat-label">Who we serve</div>
+          <div class="mission-stat-text" style="color:var(--navy);">Travel nurses, allied health professionals, therapy travelers, locum physicians — and the facilities that need them most.</div>
+        </div>
+        <div style="background:#fff; border:2px solid rgba(255,255,255,0.9); border-left:4px solid var(--red); border-radius:0 14px 14px 0; padding:28px 32px;">
+          <div class="mission-stat-label">Our commitment</div>
+          <div class="mission-stat-text" style="color:var(--navy);">Ensuring quality staff reach facilities in areas of greatest need, from urban medical centers to rural critical access hospitals.</div>
+        </div>
+        <div style="background:#fff; border:2px solid rgba(255,255,255,0.9); border-left:4px solid var(--red); border-radius:0 14px 14px 0; padding:28px 32px;">
+          <div class="mission-stat-label">Our promise</div>
+          <div class="mission-stat-text" style="color:var(--navy);">At TGL MedStaff, you are more than an employee or a client — you are family. We create positive experiences over and over again.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM PREVIEW -->
+<section class="team-preview">
+  <div class="team-preview-inner">
+
+    <div>
+      <div class="section-tag">The Team</div>
+      <h2>Meet <em>The Good Life</em> Team</h2>
+      <p>Connecting compassionate caregivers who love adventure with amazing opportunities. Our team brings over a decade of combined experience from some of the largest and most reputable healthcare staffing organizations in the industry.</p>
+      <a href="team.html" class="team-link">
+        Meet The Good Life Team
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <div class="team-avatars">
+      <div class="team-avatar-card">
+        <div class="avatar-circle" style="background:var(--navy-dark);">JL</div>
+        <div class="avatar-name">Jeff Leise</div>
+        <div class="avatar-title">Chief Executive Officer</div>
+      </div>
+      <div class="team-avatar-card">
+        <div class="avatar-circle" style="background:var(--navy);">BB</div>
+        <div class="avatar-name">Bryan Baumgart</div>
+        <div class="avatar-title">Chief Business Officer</div>
+      </div>
+      <div class="team-avatar-card">
+        <div class="avatar-circle" style="background:var(--navy-dark);">VO</div>
+        <div class="avatar-name">Vince Odorisio</div>
+        <div class="avatar-title">Chief Recruitment Officer</div>
+      </div>
+      <div class="team-avatar-card">
+        <div class="avatar-circle" style="background:var(--navy);">SB</div>
+        <div class="avatar-name">Summer Baumgart</div>
+        <div class="avatar-title">Chief Clinical Officer</div>
+      </div>
+      <div class="team-avatar-card">
+        <div class="avatar-circle" style="background:var(--navy-dark);">BL</div>
+        <div class="avatar-name">Brian Lukowski</div>
+        <div class="avatar-title">Chief Financial Officer</div>
+      </div>
+      <a href="team.html" class="team-avatar-card see-more">
+        <div class="avatar-circle" style="background:rgba(255,255,255,0.1);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+        <div class="avatar-name">See Full Team</div>
+        <div class="avatar-title">Meet everyone →</div>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-banner">
+  <div class="cta-content">
+    <div class="section-tag" style="justify-content:center;">Work With Us</div>
+    <h2>Ready to experience<br>the <em>good life?</em></h2>
+    <p>Whether you're a traveler looking for your next assignment, a facility seeking staffing support, or a locums physician ready for flexibility — TGL MedStaff has you covered.</p>
+    <div class="cta-actions">
+      <a href="mailto:info@tglmedstaff.com" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Get in Touch
+      </a>
+      <a href="tel:+14022752112" class="btn-outline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.69h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 10a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.5 17z"/></svg>
+        Call (402) 275-2112
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer style="background:#111827; font-family:'DM Sans',sans-serif; color:#fff;">
+
+  <!-- ── TOP: Certifications & Awards ── -->
+  <div style="background:#1a2235; border-bottom:1px solid rgba(255,255,255,0.08); padding:36px 48px;">
+    <div style="max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:center; gap:64px; flex-wrap:wrap;">
+
+      <!-- NATHO -->
+      <div style="display:flex;align-items:center;gap:14px;opacity:0.85;">
+        <!-- NATHO logo SVG recreation -->
+        <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="24" fill="#f0f4f8"/>
+          <!-- 5 people in star formation -->
+          <g fill="#f07060">
+            <!-- center top person -->
+            <circle cx="24" cy="10" r="3.5"/>
+            <path d="M20 18 Q24 14 28 18 L27 24 H21 Z"/>
+            <!-- top-right person -->
+            <circle cx="36" cy="16" r="3"/>
+            <path d="M33 23 Q36 20 39 23 L38.5 28 H33.5 Z"/>
+            <!-- bottom-right person -->
+            <circle cx="34" cy="34" r="3"/>
+            <path d="M31 40 Q34 37 37 40 L36.5 44 H31.5 Z"/>
+            <!-- bottom-left person -->
+            <circle cx="14" cy="34" r="3"/>
+            <path d="M11 40 Q14 37 17 40 L16.5 44 H11.5 Z"/>
+            <!-- top-left person -->
+            <circle cx="12" cy="16" r="3"/>
+            <path d="M9 23 Q12 20 15 23 L14.5 28 H9.5 Z"/>
+          </g>
+        </svg>
+        <div>
+          <div style="font-size:18px;font-weight:900;color:#2d3748;letter-spacing:1px;line-height:1;">NATHO</div>
+          <div style="font-size:10px;color:#6b7280;line-height:1.3;margin-top:2px;">National Association of Travel<br>Healthcare Organizations</div>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div style="width:1px;height:48px;background:rgba(255,255,255,0.1);"></div>
+
+      <!-- Joint Commission Gold Seal -->
+      <div style="display:flex;align-items:center;gap:16px;opacity:0.9;">
+        <!-- Gold seal SVG -->
+        <svg width="52" height="52" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="26" cy="26" r="25" fill="#c8972a" stroke="#e8b84b" stroke-width="2"/>
+          <circle cx="26" cy="26" r="19" fill="none" stroke="#f0cc6e" stroke-width="1.5" stroke-dasharray="3 2"/>
+          <text x="26" y="18" text-anchor="middle" font-size="5" font-weight="700" fill="#fff" font-family="Arial">THE JOINT</text>
+          <text x="26" y="24" text-anchor="middle" font-size="5" font-weight="700" fill="#fff" font-family="Arial">COMMISSION</text>
+          <!-- checkmark -->
+          <path d="M18 28 L23 34 L34 22" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="26" y="42" text-anchor="middle" font-size="4" fill="#f0cc6e" font-family="Arial">ACCREDITED</text>
+        </svg>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#e8b84b;line-height:1.3;">Joint Commission</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.55);margin-top:2px;">Certified &amp; Accredited</div>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div style="width:1px;height:48px;background:rgba(255,255,255,0.1);"></div>
+
+      <!-- Omaha's Choice Award -->
+      <div style="display:flex;align-items:center;gap:14px;opacity:0.85;">
+        <svg width="44" height="52" viewBox="0 0 44 52" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="22" cy="22" r="20" fill="#1B2F6E" stroke="#a8bde0" stroke-width="2"/>
+          <text x="22" y="14" text-anchor="middle" font-size="4.5" font-weight="700" fill="#fff" font-family="Arial">OMAHA'S</text>
+          <text x="22" y="20" text-anchor="middle" font-size="7" font-weight="900" fill="#CC2229" font-family="Arial">CHOICE</text>
+          <text x="22" y="27" text-anchor="middle" font-size="5" font-weight="700" fill="#fff" font-family="Arial">AWARDS</text>
+          <!-- star -->
+          <polygon points="22,30 23.5,35 28,35 24.5,37.5 25.5,42 22,39.5 18.5,42 19.5,37.5 16,35 20.5,35" fill="#e8b84b"/>
+        </svg>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#a8bde0;line-height:1.3;">Omaha's Choice</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.55);margin-top:2px;">Award Winner</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── MIDDLE: Nav columns ── -->
+  <div style="padding:56px 48px 40px; border-bottom:1px solid rgba(255,255,255,0.08);">
+    <div style="max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr 1fr; gap:40px;">
+
+      <!-- Brand column -->
+      <div>
+        <div style="margin-bottom:20px;">
+          <svg width="130" height="34" viewBox="0 0 130 34" xmlns="http://www.w3.org/2000/svg">
+            <text x="2" y="24" font-size="24" font-weight="900" fill="#CC2229" font-family="Arial Black,sans-serif" letter-spacing="-1">TGL</text>
+            <rect x="2" y="27" width="58" height="5" fill="#a8bde0" rx="1"/>
+            <polyline points="62,20 67,20 69,12 71,28 73,16 75,24 77,20 81,20 83,14 85,26 87,20 94,20" fill="none" stroke="#CC2229" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M98,15 C98,12.8 95.8,10.5 93.5,12.2 C91.2,10.5 89,12.8 89,15 C89,17.2 93.5,21.5 93.5,21.5 C93.5,21.5 98,17.2 98,15Z" fill="#CC2229" transform="translate(6,0)"/>
+            <text x="62" y="32" font-size="8.5" font-weight="800" fill="#a8bde0" font-family="Arial,sans-serif" letter-spacing="1.5">MEDSTAFF</text>
+          </svg>
+        </div>
+        <p style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.75;margin-bottom:20px;">Connecting compassionate healthcare providers and facilities. The Good Life — for everyone.</p>
+        <!-- Social icons -->
+        <div style="display:flex;gap:12px;">
+          <a href="#" style="width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:background 0.2s;text-decoration:none;" onmouseover="this.style.background='#1877f2'" onmouseout="this.style.background='rgba(255,255,255,0.08)'" title="Facebook">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="#" style="width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:background 0.2s;text-decoration:none;" onmouseover="this.style.background='#e1306c'" onmouseout="this.style.background='rgba(255,255,255,0.08)'" title="Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" style="width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:background 0.2s;text-decoration:none;" onmouseover="this.style.background='#0a66c2'" onmouseout="this.style.background='rgba(255,255,255,0.08)'" title="LinkedIn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="#" style="width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:background 0.2s;text-decoration:none;" onmouseover="this.style.background='#000'" onmouseout="this.style.background='rgba(255,255,255,0.08)'" title="TikTok">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.17 8.17 0 0 0 4.78 1.52V6.74a4.85 4.85 0 0 1-1.01-.05z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Travelers -->
+      <div>
+        <div style="font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:18px;">Travelers</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+          <li><a href="travelers.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Benefits & Pay</a></li>
+          <li><a href="nursing.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Nursing</a></li>
+          <li><a href="allied.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Allied</a></li>
+          <li><a href="therapy.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Therapy</a></li>
+          <li><a href="travelers.html#apply-form" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Apply Now</a></li>
+          <li><a href="team.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Referral Bonus</a></li>
+        </ul>
+      </div>
+
+      <!-- Facilities -->
+      <div>
+        <div style="font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:18px;">Facilities</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+          <li><a href="workforce.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Workforce Solutions</a></li>
+          <li><a href="locums.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Locums for Facilities</a></li>
+          <li><a href="mailto:todd@tglmedstaff.com" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Request Staff</a></li>
+        </ul>
+      </div>
+
+      <!-- Locums -->
+      <div>
+        <div style="font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:18px;">Locums</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+          <li><a href="locums.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Find Locum Roles</a></li>
+          <li><a href="locums.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Locums for Facilities</a></li>
+          <li><a href="mailto:aaron@tglmedstaff.com" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Talk to a Recruiter</a></li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div>
+        <div style="font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:18px;">Company</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+          <li><a href="about.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">About TGL</a></li>
+          <li><a href="team.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Meet the Team</a></li>
+          <li><a href="resources.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Resources</a></li>
+          <li><a href="resources.html#social" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Follow Us</a></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── BOTTOM: Contact + Legal ── -->
+  <div style="padding:28px 48px;">
+    <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+
+      <!-- Contact -->
+      <div style="display:flex;gap:32px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span style="font-size:13px;color:rgba(255,255,255,0.45);">12165 W. Center Rd STE #80, Omaha, NE 68144</span>
+        </div>
+        <a href="tel:+14022752112" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.69h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 10a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.5 17z"/></svg>
+          <span style="font-size:13px;color:rgba(255,255,255,0.45);">(402) 275-2112</span>
+        </a>
+        <a href="mailto:info@tglmedstaff.com" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span style="font-size:13px;color:rgba(255,255,255,0.45);">info@tglmedstaff.com</span>
+        </a>
+      </div>
+
+      <!-- Legal -->
+      <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+        <span style="font-size:12px;color:rgba(255,255,255,0.3);">&copy; 2026 The Good Life Med Staff. All rights reserved.</span>
+        <a href="#" style="font-size:12px;color:rgba(255,255,255,0.3);text-decoration:none;" onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">Privacy Policy</a>
+        <a href="#" style="font-size:12px;color:rgba(255,255,255,0.3);text-decoration:none;" onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">Terms of Use</a>
+      </div>
+
+    </div>
+  </div>
+
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Allied Travelers — TGL MedStaff</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --red: #CC2229; --red-dark: #a31a20; --red-light: #f5e6e7;
+    --navy: #1B2F6E; --navy-dark: #111e4a; --navy-mid: #2a4188; --navy-light: #e8edf8;
+    --white: #ffffff; --off-white: #f8f7f5; --gray: #6b7280; --text: #111827;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--text); overflow-x: hidden; }
+
+  /* DIVISION BAR */
+  .division-bar { position: sticky; top: 58px; z-index: 99; background: var(--navy); border-bottom: 3px solid var(--red); padding: 0 48px; }
+  .division-bar-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 0; }
+  .div-tab { display: inline-flex; align-items: center; padding: 0 36px; height: 62px; font-size: 18px; font-weight: 700; color: rgba(255,255,255,0.65); text-decoration: none; border-bottom: 3px solid transparent; margin-bottom: -3px; letter-spacing: 0.3px; transition: color 0.2s, border-color 0.2s, background 0.2s; white-space: nowrap; }
+  .div-tab:hover, .div-tab.active { color: #fff; background: rgba(255,255,255,0.05); border-bottom-color: #fff; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(255,255,255,0.97); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(27,47,110,0.1); display: flex; align-items: center; justify-content: space-between; padding: 12px 48px; }
+  .nav-logo { display: flex; align-items: center; text-decoration: none; }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a { font-size: 16px; font-weight: 500; color: var(--navy); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--red); }
+  .nav-links a.active { color: var(--red); border-bottom: 2px solid var(--red); padding-bottom: 2px; }
+  .nav-cta { background: var(--red); color: #fff; padding: 9px 22px; border-radius: 24px; font-size: 13px; font-weight: 600; text-decoration: none; transition: background 0.2s, transform 0.15s; }
+  .nav-cta:hover { background: var(--red-dark); transform: translateY(-1px); }
+
+  /* HERO */
+  .hero { min-height: 90vh; background: var(--navy-dark); position: relative; display: flex; align-items: center; overflow: hidden; padding-top: 130px; }
+  .hero::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px); background-size: 40px 40px; }
+  .hero-diagonal { position: absolute; right: -80px; top: 0; bottom: 0; width: 55%; background: var(--navy-mid); clip-path: polygon(12% 0, 100% 0, 100% 100%, 0% 100%); opacity: 0.5; }
+  .hero-ekg { position: absolute; bottom: 60px; left: 0; right: 0; width: 100%; opacity: 0.15; pointer-events: none; }
+  .hero-ekg path { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: ekg-loop 4s linear infinite; }
+  .hero-content { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 80px 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; width: 100%; }
+  .hero-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; letter-spacing: 2px; color: var(--red); text-transform: uppercase; margin-bottom: 22px; }
+  .hero-eyebrow::before { content: ''; display: block; width: 28px; height: 2px; background: var(--red); }
+  h1 { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(42px, 5.5vw, 68px); font-weight: 900; line-height: 1.1; color: var(--white); margin-bottom: 24px; }
+  h1 em { color: var(--red); font-style: italic; }
+  .hero-sub { font-size: 18px; line-height: 1.8; color: rgba(255,255,255,0.65); max-width: 460px; margin-bottom: 40px; }
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary { background: var(--red); color: #fff; padding: 14px 32px; border-radius: 30px; font-size: 14px; font-weight: 600; text-decoration: none; transition: background 0.2s, transform 0.15s; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-primary:hover { background: var(--red-dark); transform: translateY(-2px); }
+  .btn-outline { border: 1.5px solid rgba(255,255,255,0.3); color: #fff; padding: 14px 32px; border-radius: 30px; font-size: 14px; font-weight: 500; text-decoration: none; transition: border-color 0.2s, background 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.07); }
+  .hero-stats-panel { display: flex; flex-direction: column; gap: 16px; }
+  .hero-stat { background: rgba(255,255,255,0.07); border: 1.5px solid rgba(255,255,255,0.18); border-radius: 14px; padding: 28px 30px; display: flex; align-items: center; gap: 22px; text-decoration: none; transition: background 0.2s, border-color 0.2s, transform 0.15s; }
+  .hero-stat:hover { background: rgba(255,255,255,0.13); border-color: rgba(255,255,255,0.4); transform: translateY(-2px); }
+  .hero-stat-label { font-size: 20px; font-weight: 700; color: #fff; }
+
+  /* SECTIONS */
+  .section { padding: 80px 48px; max-width: 1200px; margin: 0 auto; }
+  .section-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 700; letter-spacing: 2px; color: var(--red); text-transform: uppercase; margin-bottom: 16px; }
+  .section-tag::before { content: ''; display: block; width: 20px; height: 2px; background: var(--red); }
+  h2 { font-family: 'DM Serif Display', serif; font-size: clamp(30px, 3.5vw, 46px); font-weight: 900; color: var(--navy); line-height: 1.15; margin-bottom: 16px; }
+  h2 em { color: var(--red); font-style: italic; }
+  .section-intro { font-size: 18px; color: var(--gray); line-height: 1.75; max-width: 600px; margin-bottom: 48px; }
+
+  /* SPECIALTY LIST */
+  .spec-section { background: var(--navy); padding: 80px 0; }
+  .spec-inner { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+  .spec-section .section-tag { color: var(--red); }
+  .spec-section h2 { color: #fff; }
+  .spec-section .section-intro { color: rgba(255,255,255,0.6); }
+  .spec-list { display: grid; grid-template-columns: repeat(3,1fr); border-top: 1px solid rgba(255,255,255,0.1); }
+  .spec-item { display: flex; align-items: center; gap: 14px; padding: 16px 8px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .spec-item:nth-last-child(-n+3) { border-bottom: none; }
+  .spec-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
+  .spec-item span { font-size: 15px; font-weight: 500; color: rgba(255,255,255,0.85); }
+
+  /* BENEFIT CARDS */
+  .benefit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .benefit-card { background: var(--white); border: 2.5px solid rgba(27,47,110,0.25); border-radius: 16px; padding: 28px; position: relative; overflow: hidden; transition: box-shadow 0.25s, transform 0.25s; }
+  .benefit-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+  .benefit-card:hover { box-shadow: 0 12px 40px rgba(27,47,110,0.12); transform: translateY(-4px); }
+  .benefit-card:hover::after { transform: scaleX(1); }
+  .benefit-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--navy-light); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+  .benefit-card h3 { font-size: 17px; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
+  .benefit-card p { font-size: 15px; color: var(--gray); line-height: 1.7; }
+
+  /* PROCESS */
+  .process-section { background: var(--off-white); padding: 80px 0; }
+  .process-inner { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+  .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 48px; position: relative; }
+  .process-steps::before { content: ''; position: absolute; top: 28px; left: 10%; right: 10%; height: 2px; background: linear-gradient(90deg, var(--red), var(--navy)); z-index: 0; }
+  .step { text-align: center; padding: 0 16px; position: relative; z-index: 1; }
+  .step-num { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 900; }
+  .step:nth-child(1) .step-num { background: var(--red); color: #fff; }
+  .step:nth-child(2) .step-num { background: var(--navy); color: #fff; }
+  .step:nth-child(3) .step-num { background: var(--red); color: #fff; }
+  .step:nth-child(4) .step-num { background: var(--navy); color: #fff; }
+  .step h3 { font-size: 16px; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
+  .step p { font-size: 14px; color: var(--gray); line-height: 1.6; }
+
+  /* CTA */
+  .cta-banner { background: var(--navy-dark); position: relative; overflow: hidden; padding: 80px 48px; text-align: center; }
+  .cta-banner::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(204,34,41,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(204,34,41,0.08) 1px, transparent 1px); background-size: 48px 48px; }
+  .cta-content { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+  .cta-banner .section-tag { justify-content: center; }
+  .cta-banner .section-tag::before { display: none; }
+  .cta-banner h2 { color: #fff; margin-bottom: 16px; }
+  .cta-banner p { font-size: 18px; color: rgba(255,255,255,0.6); margin-bottom: 40px; }
+  .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .btn-cta-primary { background: var(--red); color: #fff; padding: 14px 32px; border-radius: 30px; font-size: 14px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s, transform 0.15s; }
+  .btn-cta-primary:hover { background: var(--red-dark); transform: translateY(-2px); }
+  .btn-cta-outline { border: 1.5px solid rgba(255,255,255,0.3); color: #fff; padding: 14px 32px; border-radius: 30px; font-size: 14px; font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: border-color 0.2s, background 0.2s; }
+  .btn-cta-outline:hover { border-color: #fff; background: rgba(255,255,255,0.07); }
+
+  /* FOOTER */
+  footer { background: var(--off-white); border-top: 1px solid rgba(27,47,110,0.1); padding: 40px 48px; display: flex; align-items: center; justify-content: space-between; }
+  .footer-text { font-size: 13px; color: var(--gray); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 13px; color: var(--gray); text-decoration: none; }
+  .footer-links a:hover { color: var(--red); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes ekg { from { stroke-dashoffset: 1000; } to { stroke-dashoffset: 0; } }
+  @keyframes ekg-loop { 0% { stroke-dashoffset: 1000; } 100% { stroke-dashoffset: -1000; } } 100% { stroke-dashoffset: -1000; } }
+
+  @media (max-width: 900px) {
+    nav { padding: 12px 24px; }
+    .nav-links { display: none; }
+    .hero-content { grid-template-columns: 1fr; padding: 60px 24px; }
+    .hero-stats-panel { display: none; }
+    .benefit-grid { grid-template-columns: 1fr; }
+    .spec-list { grid-template-columns: 1fr 1fr; }
+    .process-steps { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .process-steps::before { display: none; }
+    .section { padding: 60px 24px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="about.html">
+    <svg width="130" height="34" viewBox="0 0 130 34" xmlns="http://www.w3.org/2000/svg">
+      <text x="2" y="24" font-size="24" font-weight="900" fill="#CC2229" font-family="Arial Black, sans-serif" letter-spacing="-1">TGL</text>
+      <rect x="2" y="27" width="58" height="5" fill="#1B2F6E" rx="1"/>
+      <polyline points="62,20 67,20 69,12 71,28 73,16 75,24 77,20 81,20 83,14 85,26 87,20 94,20" fill="none" stroke="#CC2229" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M98,15 C98,12.8 95.8,10.5 93.5,12.2 C91.2,10.5 89,12.8 89,15 C89,17.2 93.5,21.5 93.5,21.5 C93.5,21.5 98,17.2 98,15Z" fill="#CC2229" transform="translate(6,0)"/>
+      <text x="62" y="32" font-size="8.5" font-weight="800" fill="#1B2F6E" font-family="Arial, sans-serif" letter-spacing="1.5">MEDSTAFF</text>
+    </svg></a>
+  <div class="nav-links">
+    <a href="about.html">About</a>
+        <a href="travelers.html" class="active">Travelers</a>
+        <a href="workforce.html">Workforce</a>
+        <a href="locums.html">Locums</a>
+        <a href="resources.html">Resources</a>
+  </div>
+  <a class="nav-cta" href="#apply-form">Apply Now</a>
+</nav>
+
+<div class="division-bar">
+  <div class="division-bar-inner">
+    <a href="nursing.html" class="div-tab nursing">Nursing</a>
+    <a href="allied.html" class="div-tab allied active">Allied</a>
+    <a href="therapy.html" class="div-tab therapy">Therapy</a>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="hero-diagonal"></div>
+          <svg class="hero-ekg" width="1440" height="80" viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path style="stroke-dasharray:1000;stroke-dashoffset:1000;animation:ekg-loop 4s linear infinite;" d="M0,40 L120,40 L140,40 L155,8 L165,72 L175,24 L183,56 L190,40 L310,40 L330,40 L345,8 L355,72 L365,24 L373,56 L380,40 L500,40 L520,40 L535,8 L545,72 L555,24 L563,56 L570,40 L690,40 L710,40 L725,8 L735,72 L745,24 L753,56 L760,40 L880,40 L900,40 L915,8 L925,72 L935,24 L943,56 L950,40 L1070,40 L1090,40 L1105,8 L1115,72 L1125,24 L1133,56 L1140,40 L1260,40 L1280,40 L1295,8 L1305,72 L1315,24 L1323,56 L1330,40 L1440,40" fill="none" stroke="white" stroke-width="2"/>
+  </svg>
+  <div class="hero-content">
+    <div>
+      <div class="hero-eyebrow">Travelers · Allied Health</div>
+      <h1>Allied health, your<br><em>way.</em></h1>
+      <p class="hero-sub">TGL MedStaff connects allied health professionals with travel assignments nationwide — across imaging, lab, cardiology, pharmacy, and beyond.</p>
+      <div class="hero-actions">
+        <a href="#apply-form" class="btn-primary">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.69h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 10a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.5 17z"/></svg>
+          Apply Now
+        </a>
+        <a href="mailto:travis@tglmedstaff.com?subject=Allied%20Traveler%20Inquiry" class="btn-outline">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Email Us
+        </a>
+      </div>
+    </div>
+    <div class="hero-stats-panel">
+      <a href="#specialties" class="hero-stat" style="text-decoration:none;">
+        <div style="flex:1;"><div class="hero-stat-label">Specialties</div><div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:2px;">Browse our allied placement areas</div></div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#benefits" class="hero-stat" style="text-decoration:none;">
+        <div style="flex:1;"><div class="hero-stat-label">Benefits & Pay</div><div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:2px;">CEUs, competitive pay, full benefits</div></div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#process" class="hero-stat" style="text-decoration:none;">
+        <div style="flex:1;"><div class="hero-stat-label">How It Works</div><div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:2px;">From application to first shift</div></div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a></div>
+  </div>
+</section>
+
+<!-- SPECIALTIES -->
+<section class="spec-section" id="specialties">
+  <div class="spec-inner">
+    <div class="section-tag">Specialties We Place</div>
+    <h2 style="color:#fff;">Where we <em>place you</em></h2>
+    <p class="section-intro">We have active opportunities across the full spectrum of allied specialties and settings.</p>
+    <div class="spec-list"><div class="spec-item"><div class="spec-dot"></div><span>Radiology / Imaging</span></div>
+      <div class="spec-item"><div class="spec-dot"></div><span>MRI Technologist</span></div>
+      <div class="spec-item"><div class="spec-dot"></div><span>CT Technologist</span></div>
+      <div class="spec-item"><div class="spec-dot"></div><span>Clinical Laboratory</span></div>
+      <div class="spec-item"><div class="spec-dot"></div><span>Medical Laboratory Scientist</span></div>
+      <div class="spec-item"><div class="spec-dot"></div><span>Blood Bank</span></div>
+      <div class="spec-item"><div class="spec-dot"></div><span>Cardiology / Echo</span></div>
+      <div class="spec-item"><div class="spec-dot"></div><span>Cardiovascular Tech</span></div>
+      <div class="spec-item"><div class="spec-dot"></div><span>Catheterization Lab</span></div>
+      <div class="spec-item"><div class="spec-dot"></div><span>Pharmacy Technician</span></div>
+      <div class="spec-item"><div class="spec-dot"></div><span>Surgical Technologist</span></div>
+      <div class="spec-item"><div class="spec-dot"></div><span>Sterile Processing</span></div>
+      <div class="spec-item"><div class="spec-dot"></div><span>Respiratory Therapy</span></div>
+      <div class="spec-item"><div class="spec-dot"></div><span>Dialysis Technician</span></div>
+      <div class="spec-item"><div class="spec-dot"></div><span>Nuclear Medicine</span></div>
+      </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section id="benefits">
+  <div class="section">
+    <div class="section-tag">Benefits & Pay</div>
+    <h2>Everything you need to <em>thrive</em></h2>
+    <p class="section-intro">As a TGL traveler you're backed by a full package — competitive pay, continuing education, clinical support, and more.</p>
+    <div class="benefit-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1B2F6E" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <h3>Competitive Weekly Pay</h3>
+        <p>Personalized pay packages built around your financial goals, with accurate weekly direct deposit and streamlined timekeeping.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1B2F6E" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <h3>CEU Reimbursement</h3>
+        <p>Allied travelers are eligible for up to $350 per year in continuing education reimbursement to keep your certifications current.</p>
+        <p style="font-size:12px;color:#9ca3af;margin-top:10px;line-height:1.5;">*Eligible once one 13-week assignment is completed and on a subsequent 13-week assignment or extension.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1B2F6E" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/></svg>
+        </div>
+        <h3>24/7 Clinical Support</h3>
+        <p>Our on-staff clinicians are available around the clock for guidance, coaching, and support throughout your assignment.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1B2F6E" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Licensure Reimbursement</h3>
+        <p>Travelers may be eligible for reimbursement of licensing fees and required certifications for their assignment.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1B2F6E" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <h3>Health & Life Insurance</h3>
+        <p>Insurance options including health, dental, and life coverage to protect you and your family on the road.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1B2F6E" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/></svg>
+        </div>
+        <h3>Referral &amp; Loyalty Bonuses</h3>
+        <p>Earn up to <strong>$750</strong> when a referred traveler completes a 13-week assignment. Repeat travelers also earn Good Life loyalty bonuses.</p>
+        <p style="font-size:12px;color:#9ca3af;margin-top:10px;line-height:1.5;">*Referral bonus amount may vary based on discipline and specialty. Ask your recruiter for details.</p>
+      </div></div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process-section" id="process">
+  <div class="process-inner">
+    <div class="section-tag">How It Works</div>
+    <h2>On assignment in <em>4 steps</em></h2>
+    <p class="section-intro" style="margin-bottom:0;">Simple, fast, and personal — from your first call to your first shift.</p>
+    <div class="process-steps">
+      <div class="step"><div class="step-num">1</div><h3>Talk to a Recruiter</h3><p>Tell us your specialty, preferred locations, and schedule. We listen first, then find the right fit.</p></div>
+      <div class="step"><div class="step-num">2</div><h3>Choose Your Assignment</h3><p>We present curated opportunities that match your goals. You choose — no pressure, no mismatches.</p></div>
+      <div class="step"><div class="step-num">3</div><h3>We Handle the Details</h3><p>Licensing, credentialing, and logistics — we take care of the paperwork so you can focus on the move.</p></div>
+      <div class="step"><div class="step-num">4</div><h3>Start & Stay Supported</h3><p>Arrive ready. Your recruiter and our clinical team stay available throughout your entire assignment.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+
+<!-- REVIEWS -->
+<section style="padding: 80px 48px; max-width: 1200px; margin: 0 auto;">
+  <div class="section-tag">Traveler Stories</div>
+  <h2>Heard from the <em>road</em></h2>
+  <p class="section-intro">Real experiences from healthcare providers who've traveled with TGL MedStaff.</p>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:32px;">
+    <div style="background:var(--off-white); border:1.5px dashed rgba(27,47,110,0.15); border-radius:16px; min-height:180px; display:flex; align-items:center; justify-content:center;">
+      <div style="text-align:center;">
+        <div style="width:40px;height:40px;border-radius:50%;background:var(--navy-light);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1B2F6E" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <p style="font-size:13px;color:var(--gray);font-style:normal;margin:0;">Review coming soon</p>
+      </div>
+    </div>
+    <div style="background:var(--off-white); border:1.5px dashed rgba(27,47,110,0.15); border-radius:16px; min-height:180px; display:flex; align-items:center; justify-content:center;">
+      <div style="text-align:center;">
+        <div style="width:40px;height:40px;border-radius:50%;background:var(--navy-light);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1B2F6E" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <p style="font-size:13px;color:var(--gray);font-style:normal;margin:0;">Review coming soon</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-banner">
+  <div class="cta-content">
+    <div class="section-tag" style="justify-content:center;color:#CC2229;">Ready to Travel?</div>
+    <h2>Find your next<br>allied <em>assignment.</em></h2>
+    <p>Speak with a TGL allied health recruiter today — no obligation, just an honest conversation about where you want to go next.</p>
+    <div class="cta-actions">
+      <a href="tel:+14022752371" class="btn-cta-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.69h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 10a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.5 17z"/></svg>
+        Call (402) 275-2371
+      </a>
+      <a href="mailto:travis@tglmedstaff.com?subject=Allied%20Traveler%20Inquiry" class="btn-cta-outline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email Us
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer style="background:#111827; font-family:'DM Sans',sans-serif; color:#fff;">
+
+  <!-- ── TOP: Certifications & Awards ── -->
+  <div style="background:#1a2235; border-bottom:1px solid rgba(255,255,255,0.08); padding:36px 48px;">
+    <div style="max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:center; gap:64px; flex-wrap:wrap;">
+
+      <!-- NATHO -->
+      <div style="display:flex;align-items:center;gap:14px;opacity:0.85;">
+        <!-- NATHO logo SVG recreation -->
+        <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="24" fill="#f0f4f8"/>
+          <!-- 5 people in star formation -->
+          <g fill="#f07060">
+            <!-- center top person -->
+            <circle cx="24" cy="10" r="3.5"/>
+            <path d="M20 18 Q24 14 28 18 L27 24 H21 Z"/>
+            <!-- top-right person -->
+            <circle cx="36" cy="16" r="3"/>
+            <path d="M33 23 Q36 20 39 23 L38.5 28 H33.5 Z"/>
+            <!-- bottom-right person -->
+            <circle cx="34" cy="34" r="3"/>
+            <path d="M31 40 Q34 37 37 40 L36.5 44 H31.5 Z"/>
+            <!-- bottom-left person -->
+            <circle cx="14" cy="34" r="3"/>
+            <path d="M11 40 Q14 37 17 40 L16.5 44 H11.5 Z"/>
+            <!-- top-left person -->
+            <circle cx="12" cy="16" r="3"/>
+            <path d="M9 23 Q12 20 15 23 L14.5 28 H9.5 Z"/>
+          </g>
+        </svg>
+        <div>
+          <div style="font-size:18px;font-weight:900;color:#2d3748;letter-spacing:1px;line-height:1;">NATHO</div>
+          <div style="font-size:10px;color:#6b7280;line-height:1.3;margin-top:2px;">National Association of Travel<br>Healthcare Organizations</div>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div style="width:1px;height:48px;background:rgba(255,255,255,0.1);"></div>
+
+      <!-- Joint Commission Gold Seal -->
+      <div style="display:flex;align-items:center;gap:16px;opacity:0.9;">
+        <!-- Gold seal SVG -->
+        <svg width="52" height="52" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="26" cy="26" r="25" fill="#c8972a" stroke="#e8b84b" stroke-width="2"/>
+          <circle cx="26" cy="26" r="19" fill="none" stroke="#f0cc6e" stroke-width="1.5" stroke-dasharray="3 2"/>
+          <text x="26" y="18" text-anchor="middle" font-size="5" font-weight="700" fill="#fff" font-family="Arial">THE JOINT</text>
+          <text x="26" y="24" text-anchor="middle" font-size="5" font-weight="700" fill="#fff" font-family="Arial">COMMISSION</text>
+          <!-- checkmark -->
+          <path d="M18 28 L23 34 L34 22" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="26" y="42" text-anchor="middle" font-size="4" fill="#f0cc6e" font-family="Arial">ACCREDITED</text>
+        </svg>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#e8b84b;line-height:1.3;">Joint Commission</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.55);margin-top:2px;">Certified &amp; Accredited</div>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div style="width:1px;height:48px;background:rgba(255,255,255,0.1);"></div>
+
+      <!-- Omaha's Choice Award -->
+      <div style="display:flex;align-items:center;gap:14px;opacity:0.85;">
+        <svg width="44" height="52" viewBox="0 0 44 52" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="22" cy="22" r="20" fill="#1B2F6E" stroke="#a8bde0" stroke-width="2"/>
+          <text x="22" y="14" text-anchor="middle" font-size="4.5" font-weight="700" fill="#fff" font-family="Arial">OMAHA'S</text>
+          <text x="22" y="20" text-anchor="middle" font-size="7" font-weight="900" fill="#CC2229" font-family="Arial">CHOICE</text>
+          <text x="22" y="27" text-anchor="middle" font-size="5" font-weight="700" fill="#fff" font-family="Arial">AWARDS</text>
+          <!-- star -->
+          <polygon points="22,30 23.5,35 28,35 24.5,37.5 25.5,42 22,39.5 18.5,42 19.5,37.5 16,35 20.5,35" fill="#e8b84b"/>
+        </svg>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#a8bde0;line-height:1.3;">Omaha's Choice</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.55);margin-top:2px;">Award Winner</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── MIDDLE: Nav columns ── -->
+  <div style="padding:56px 48px 40px; border-bottom:1px solid rgba(255,255,255,0.08);">
+    <div style="max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr 1fr; gap:40px;">
+
+      <!-- Brand column -->
+      <div>
+        <div style="margin-bottom:20px;">
+          <svg width="130" height="34" viewBox="0 0 130 34" xmlns="http://www.w3.org/2000/svg">
+            <text x="2" y="24" font-size="24" font-weight="900" fill="#CC2229" font-family="Arial Black,sans-serif" letter-spacing="-1">TGL</text>
+            <rect x="2" y="27" width="58" height="5" fill="#a8bde0" rx="1"/>
+            <polyline points="62,20 67,20 69,12 71,28 73,16 75,24 77,20 81,20 83,14 85,26 87,20 94,20" fill="none" stroke="#CC2229" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M98,15 C98,12.8 95.8,10.5 93.5,12.2 C91.2,10.5 89,12.8 89,15 C89,17.2 93.5,21.5 93.5,21.5 C93.5,21.5 98,17.2 98,15Z" fill="#CC2229" transform="translate(6,0)"/>
+            <text x="62" y="32" font-size="8.5" font-weight="800" fill="#a8bde0" font-family="Arial,sans-serif" letter-spacing="1.5">MEDSTAFF</text>
+          </svg>
+        </div>
+        <p style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.75;margin-bottom:20px;">Connecting compassionate healthcare providers and facilities. The Good Life — for everyone.</p>
+        <!-- Social icons -->
+        <div style="display:flex;gap:12px;">
+          <a href="#" style="width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:background 0.2s;text-decoration:none;" onmouseover="this.style.background='#1877f2'" onmouseout="this.style.background='rgba(255,255,255,0.08)'" title="Facebook">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="#" style="width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:background 0.2s;text-decoration:none;" onmouseover="this.style.background='#e1306c'" onmouseout="this.style.background='rgba(255,255,255,0.08)'" title="Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" style="width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:background 0.2s;text-decoration:none;" onmouseover="this.style.background='#0a66c2'" onmouseout="this.style.background='rgba(255,255,255,0.08)'" title="LinkedIn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="#" style="width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:background 0.2s;text-decoration:none;" onmouseover="this.style.background='#000'" onmouseout="this.style.background='rgba(255,255,255,0.08)'" title="TikTok">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.17 8.17 0 0 0 4.78 1.52V6.74a4.85 4.85 0 0 1-1.01-.05z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Travelers -->
+      <div>
+        <div style="font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:18px;">Travelers</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+          <li><a href="travelers.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Benefits & Pay</a></li>
+          <li><a href="nursing.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Nursing</a></li>
+          <li><a href="allied.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Allied</a></li>
+          <li><a href="therapy.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Therapy</a></li>
+          <li><a href="travelers.html#apply-form" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Apply Now</a></li>
+          <li><a href="team.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Referral Bonus</a></li>
+        </ul>
+      </div>
+
+      <!-- Facilities -->
+      <div>
+        <div style="font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:18px;">Facilities</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+          <li><a href="workforce.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Workforce Solutions</a></li>
+          <li><a href="locums.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Locums for Facilities</a></li>
+          <li><a href="mailto:todd@tglmedstaff.com" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Request Staff</a></li>
+        </ul>
+      </div>
+
+      <!-- Locums -->
+      <div>
+        <div style="font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:18px;">Locums</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+          <li><a href="locums.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Find Locum Roles</a></li>
+          <li><a href="locums.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Locums for Facilities</a></li>
+          <li><a href="mailto:aaron@tglmedstaff.com" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Talk to a Recruiter</a></li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div>
+        <div style="font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:18px;">Company</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+          <li><a href="about.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">About TGL</a></li>
+          <li><a href="team.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Meet the Team</a></li>
+          <li><a href="resources.html" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Resources</a></li>
+          <li><a href="resources.html#social" style="font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#CC2229'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Follow Us</a></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── BOTTOM: Contact + Legal ── -->
+  <div style="padding:28px 48px;">
+    <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+
+      <!-- Contact -->
+      <div style="display:flex;gap:32px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span style="font-size:13px;color:rgba(255,255,255,0.45);">12165 W. Center Rd STE #80, Omaha, NE 68144</span>
+        </div>
+        <a href="tel:+14022752112" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.69h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 10a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.5 17z"/></svg>
+          <span style="font-size:13px;color:rgba(255,255,255,0.45);">(402) 275-2112</span>
+        </a>
+        <a href="mailto:info@tglmedstaff.com" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span style="font-size:13px;color:rgba(255,255,255,0.45);">info@tglmedstaff.com</span>
+        </a>
+      </div>
+
+      <!-- Legal -->
+      <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+        <span style="font-size:12px;color:rgba(255,255,255,0.3);">&copy; 2026 The Good Life Med Staff. All rights reserved.</span>
+        <a href="#" style="font-size:12px;color:rgba(255,255,255,0.3);text-decoration:none;" onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">Privacy Policy</a>
+        <a href="#" style="font-size:12px;color:rgba(255,255,255,0.3);text-decoration:none;" onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">Terms of Use</a>
+      </div>
+
+    </div>
+  </div>
+
+</footer>
+
+</body>
+</html>
